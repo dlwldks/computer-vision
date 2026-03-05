@@ -76,21 +76,27 @@ pip install opencv-python numpy
 
  - cv01 (Grayscale):
 
- ![cv01_result](outputs/cv01_result.png)
+ <figure>
+     <img src="outputs/cv01_result.png" alt="Grayscale 결과" width="400"/>
+ </figure>
 
  경로: D:\computer-vision\E01_OpenCV\outputs\cv01_result.png
 
  - cv02 (Paint):
 
- ![cv02_result](outputs/cv02_result.png)
+ <figure>
+     <img src="outputs/cv02_result.png" alt="페인팅 결과" width="400"/>
+ </figure>
 
  경로: D:\computer-vision\E01_OpenCV\outputs\cv02_result.png
 
- - cv02 (Paint - alternate):
+ - cv03 (ROI):
 
- ![cv02_result1](outputs/cv02_result1.png)
+ <figure>
+     <img src="outputs/cv03_result.png" alt="ROI 결과" width="400"/>
+ </figure>
 
- 경로: D:\computer-vision\E01_OpenCV\outputs\cv02_result1.png
+ 경로: D:\computer-vision\E01_OpenCV\outputs\cv03_result.png
 
  ---
 
