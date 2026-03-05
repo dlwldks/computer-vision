@@ -14,10 +14,9 @@
 ### 설치
 
 pip install opencv-python numpy
+# ## cv03_roi.py
 
-
- # E01_OpenCV 실습 모음
-
+```python
  간단한 OpenCV 예제들을 모아둔 폴더입니다. 각 예제는 이미지 로드, 그레이스케일 변환, 마우스 이벤트 처리, ROI 선택 등을 다룹니다.
 
  ---
