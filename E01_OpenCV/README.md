@@ -1,18 +1,25 @@
-# E01. OpenCV 실습 과제
 
-## 0) 과제 개요
-- 과제 1: 이미지 불러오기 + 그레이스케일 변환 후 나란히 출력
-- 과제 2: 마우스 페인팅 + 붓 크기 조절(+/-) + 좌/우 클릭 색상 + 드래그 연속 그리기
-- 과제 3: 마우스 드래그로 ROI 선택 + ROI 출력 + r 리셋 + s 저장
+E01. OpenCV 실습 과제
+0. 과제 개요
 
-## 0-1) 실행 환경
-- Windows 10/11
-- Python 3.x
-- OpenCV (cv2)
-- numpy
+과제 1: 이미지 불러오기 + Grayscale 변환 후 나란히 출력
 
-설치: pip install opencv-python numpy
-```bash
+과제 2: 마우스 페인팅 + 붓 크기 조절 (+ / -) + 좌/우 클릭 색상 + 드래그 연속 그리기
+
+과제 3: 마우스 드래그로 ROI 선택 + ROI 출력 + r 리셋 + s 저장
+
+0-1. 실행 환경
+
+Windows 10 / 11
+
+Python 3.x
+
+OpenCV (cv2)
+
+NumPy
+
+설치
+pip install opencv-python numpy
 Problem 1 — Grayscale Conversion
 문제
 
@@ -37,11 +44,6 @@ import sys
 import argparse
 import cv2 as cv
 import numpy as np
-try:
-    import tkinter as tk
-except Exception:
-    tk = None
-
 
 def main():
     parser = argparse.ArgumentParser(description="원본 이미지와 그레이스케일 이미지를 나란히 표시합니다.")
@@ -50,6 +52,7 @@ def main():
     args = parser.parse_args()
 
     img = cv.imread(args.image)
+
     if img is None:
         print("이미지를 불러올 수 없습니다.")
         sys.exit(1)
@@ -63,7 +66,6 @@ def main():
     cv.imshow("Original | Grayscale", result)
     cv.waitKey(0)
     cv.destroyAllWindows()
-
 
 if __name__ == "__main__":
     main()
@@ -81,7 +83,7 @@ cv.imshow("Original | Grayscale", result)
 
 (여기에 실행 결과 이미지 삽입)
 
-[ cv01_result.png ]
+cv01_result.png
 Problem 2 — Mouse Paint
 문제
 
@@ -120,10 +122,8 @@ color = (255, 0, 0)
 img = None
 win_name = "Paint"
 
-
 def clamp(v, lo, hi):
     return max(lo, min(hi, v))
-
 
 def on_mouse(event, x, y, flags, param):
     global drawing, color, img
@@ -147,7 +147,6 @@ def on_mouse(event, x, y, flags, param):
 
     elif event == cv.EVENT_RBUTTONUP:
         drawing = False
-
 
 def main():
     global img, brush_size
@@ -176,7 +175,6 @@ def main():
 
     cv.destroyAllWindows()
 
-
 if __name__ == "__main__":
     main()
 핵심 코드
@@ -195,12 +193,12 @@ if key == ord('-'):
 
 (여기에 실행 결과 이미지 삽입)
 
-[ cv02_result.png ]
+cv02_result.png
 Problem 3 — ROI Selection
 문제
 
 사용자가 마우스를 이용해 이미지에서 관심 영역(ROI) 을 선택하고
-선택한 영역을 별도로 출력하거나 저장하는 프로그램을 구현한다.
+선택한 영역을 출력하거나 저장하는 프로그램을 구현한다.
 
 요구사항
 
@@ -217,8 +215,6 @@ s 키 → ROI 저장
 전체 코드
 # cv03_roi.py
 
-import os
-import time
 import cv2 as cv
 import numpy as np
 
@@ -231,7 +227,6 @@ display = None
 
 win_name = "ROI"
 
-
 def normalize_rect(p1, p2):
     x1, y1 = p1
     x2, y2 = p2
@@ -240,7 +235,6 @@ def normalize_rect(p1, p2):
     top = min(y1, y2)
     bottom = max(y1, y2)
     return left, top, right, bottom
-
 
 def on_mouse(event, x, y, flags, param):
     global start_pt, end_pt, dragging, roi_img, display
@@ -265,7 +259,6 @@ def on_mouse(event, x, y, flags, param):
 
         roi_img = src[t:b, l:r]
         cv.imshow("ROI", roi_img)
-
 
 def main():
     global src, display
@@ -293,7 +286,6 @@ def main():
 
     cv.destroyAllWindows()
 
-
 if __name__ == "__main__":
     main()
 핵심 코드
@@ -310,21 +302,17 @@ cv.imwrite("roi.png", roi_img)
 
 (여기에 실행 결과 이미지 삽입)
 
-[ cv03_result.png ]
-
-
+cv03_result.png
 실행 방법
 python cv01_grayscale.py
 python cv02_paint.py
 python cv03_roi.py
-참고: 폴더 구조(권장)
+참고 폴더 구조
 E01_OpenCV/
   cv01_grayscale.py
   cv02_paint.py
   cv03_roi.py
   images/
     soccer.jpg
-    girl_laughing.jpg
   outputs/
   results/
-    (실행 결과 스크린샷 저장 후 README에 첨부)
