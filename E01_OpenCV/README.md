@@ -6,25 +6,119 @@
 
 ### 과제 구성
 
-- **과제 1**: 이미지 불러오기 + Grayscale 변환 후 나란히 출력  
-- **과제 2**: 마우스 페인팅 + 붓 크기 조절 (+ / -) + 좌/우 클릭 색상 + 드래그 연속 그리기  
-- **과제 3**: 마우스 드래그로 ROI 선택 + ROI 출력 + r 리셋 + s 저장  
 
----
 
 ## 0-1. 실행 환경
 
-- Windows 10 / 11  
-- Python 3.x  
-- OpenCV (cv2)  
-- NumPy  
 
 ### 설치
 
 pip install opencv-python numpy
 
----
 
+ # E01_OpenCV 실습 모음
+
+ 간단한 OpenCV 예제들을 모아둔 폴더입니다. 각 예제는 이미지 로드, 그레이스케일 변환, 마우스 이벤트 처리, ROI 선택 등을 다룹니다.
+
+ ---
+
+ ## 요구사항
+
+ - Python 3.7 이상
+ - OpenCV (`opencv-python`) 및 NumPy (`numpy`)
+
+ 설치:
+
+ ```bash
+ pip install opencv-python numpy
+ ```
+
+ ---
+
+ ## 폴더 구조
+
+ - `E01_OpenCV/` : 과제 소스
+     - `cv01_grayscale.py` : 이미지 불러오기 + 그레이스케일 변환 후 나란히 표시
+     - `cv02_paint.py`     : 마우스 페인팅 예제 (+/-로 붓 크기 조절)
+     - `cv03_roi.py`       : 마우스로 ROI 선택 및 저장
+     - `images/`           : 샘플 이미지
+     - `outputs/`          : 실행 결과(예시 이미지) 저장 폴더
+
+ ---
+
+ ## 사용법 (예시)
+
+ - 기본 실행 (기본 이미지 사용):
+
+ ```bash
+ python E01_OpenCV/cv01_grayscale.py
+ ```
+
+ - 특정 이미지 사용:
+
+ ```bash
+ python E01_OpenCV/cv01_grayscale.py images/your_image.jpg
+ ```
+
+ - `cv02_paint.py` 실행 후 `+`/`-`로 붓 크기 조절, `q`로 종료
+ - `cv03_roi.py` 실행 후 드래그로 ROI 선택 → `s`로 저장, `r`로 리셋, `q`로 종료
+
+ ---
+
+ ## 예제별 요약
+
+ - `cv01_grayscale.py`
+     - `cv.imread()`로 이미지 로드
+     - `cv.cvtColor(..., cv.COLOR_BGR2GRAY)`로 그레이스케일 변환
+     - `np.hstack()`으로 원본과 그레이스케일 이미지를 가로 합침
+     - 큰 이미지는 화면 해상도에 맞춰 자동으로 축소하여 표시
+
+ - `cv02_paint.py`
+     - `cv.setMouseCallback()`로 마우스 이벤트 처리
+     - 좌클릭/우클릭으로 색상 선택, 드래그로 연속 그리기
+     - `+`/`-`로 붓 크기 조절
+
+ - `cv03_roi.py`
+     - 드래그로 사각형 선택 → ROI 표시
+     - `s`키로 선택한 ROI를 `outputs/`에 저장
+
+ ---
+
+ ## 실행 결과 예시
+
+ 아래 이미지는 예시 출력 파일입니다. 프로젝트 루트의 `outputs/` 폴더에 저장된 이미지들을 예시로 표시합니다.
+
+ - cv01 (Grayscale):
+
+ ![cv01_result](outputs/cv01_result.png)
+
+ 경로: D:\computer-vision\E01_OpenCV\outputs\cv01_result.png
+
+ - cv02 (Paint):
+
+ ![cv02_result](outputs/cv02_result.png)
+
+ 경로: D:\computer-vision\E01_OpenCV\outputs\cv02_result.png
+
+ - cv02 (Paint - alternate):
+
+ ![cv02_result1](outputs/cv02_result1.png)
+
+ 경로: D:\computer-vision\E01_OpenCV\outputs\cv02_result1.png
+
+ ---
+
+ ## 팁
+
+ - 이미지가 화면보다 클 경우 자동으로 축소되지만, 표시 품질을 높이려면 미리 적당한 해상도로 리사이즈 해 두세요.
+ - `outputs/` 폴더에 결과를 저장하려면 코드 내 `out_dir` 변수를 확인하세요.
+
+ ---
+
+ 필요하시면 README에 추가로 다음을 넣어드릴게요:
+ - 예제별 실행 스크린샷(절대 경로 대신 상대경로로 링크)
+ - Windows/WSL/Mac별 실행 주의사항
+ - `requirements.txt` 자동 생성
 # Problem 1 — Grayscale Conversion
 
 ## 문제
