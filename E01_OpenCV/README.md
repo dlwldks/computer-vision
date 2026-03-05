@@ -77,7 +77,7 @@ pip install opencv-python numpy
  - cv01 (Grayscale):
 
  <figure>
-     <img src="outputs/cv01_result.png" alt="Grayscale 결과" width="400"/>
+     <img src="D:\computer-vision\E01_OpenCV\outputs\cv01_result.png" alt="Grayscale 결과" width="400"/>
  </figure>
 
  경로: D:\computer-vision\E01_OpenCV\outputs\cv01_result.png
