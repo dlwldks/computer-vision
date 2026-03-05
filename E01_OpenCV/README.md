@@ -344,8 +344,9 @@ if __name__ == "__main__":
 ## 실행 결과
 
 실행 결과 예시  
-
-cv02_result.png
+ <figure>
+     <img src="D:\computer-vision\E01_OpenCV\outputs\cv02_result.png" alt="Grayscale 결과" width="400"/>
+ </figure>
 
 ---
 
