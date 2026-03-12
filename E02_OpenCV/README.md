@@ -185,6 +185,7 @@ if __name__ == "__main__":  # 현재 파일이 직접 실행된 경우
 ## 실행 결과
 
 <figure> <img src="outputs/02_rose_original.png" alt="원본 장미 이미지" width="400"/> <figcaption>변환 전 원본 이미지</figcaption> </figure> <figure> <img src="outputs/02_rose_transformed.png" alt="변환된 장미 이미지" width="400"/> <figcaption>회전, 축소, 평행이동이 적용된 결과 이미지</figcaption> </figure>
+
 ---
 
 <details>
@@ -299,38 +300,41 @@ cv2.destroyAllWindows()
 
 # Problem 3 — Disparity and Depth Estimation
 
-좌/우 스테레오 이미지를 이용하여 시차(disparity) 를 계산하고,
-이를 기반으로 깊이(depth) 를 추정하는 문제입니다.
-
-주요 과정
-
-좌/우 이미지 불러오기
-
-그레이스케일 변환
-
-StereoBM으로 disparity 계산
-
-Z = fB / d 공식을 이용한 depth 계산
-
-ROI별 평균 disparity / depth 비교
-
-가장 가까운 물체와 가장 먼 물체 판단
-
-사용 파라미터
-
-초점거리 f = 700.0
-
-baseline B = 0.12
-
-ROI
-
-Painting
-
-Frog
-
-Teddy
+좌/우 스테레오 이미지를 이용하여 **시차(disparity)** 를 계산하고,  
+이를 기반으로 **깊이(depth)** 를 추정하는 문제입니다.
 
 ---
+
+## 주요 과정
+
+1. 좌/우 이미지 불러오기  
+2. 그레이스케일 변환  
+3. **StereoBM** 알고리즘으로 disparity 계산  
+4. 깊이 계산  
+
+**Z = (f × B) / d**
+
+5. ROI별 평균 disparity / depth 비교  
+6. 가장 가까운 물체와 가장 먼 물체 판단  
+
+---
+
+## 사용 파라미터
+
+| 파라미터 | 설명 | 값 |
+|---|---|---|
+| f | 카메라 초점거리 (Focal Length) | 700.0 |
+| B | 두 카메라 사이 거리 (Baseline) | 0.12 |
+
+---
+
+## ROI (관심 영역)
+
+분석을 위해 다음 3개의 영역을 선택했습니다.
+
+- **Painting**
+- **Frog**
+- **Teddy**
 
 ## 실행 결과
 
@@ -452,3 +456,4 @@ cv2.destroyAllWindows()  # 모든 OpenCV 창 닫기
 </details>
 
 ---
+
