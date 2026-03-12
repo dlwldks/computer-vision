@@ -94,74 +94,152 @@ python 03.Depth.py
 ---
 
 <details>
-<summary>전체 코드 — cv01_grayscale.py</summary>
+<summary>전체 코드 — 01.Calibration.py</summary>
 
 ```python
-# cv01_grayscale.py
-# OpenCV로 이미지를 불러와 그레이스케일 변환 후
-# 원본 이미지와 나란히 출력하는 예제
+# 01.Calibration.py
+# 체커보드 이미지를 이용하여 카메라 내부 파라미터(Camera Matrix)와
+# 렌즈 왜곡 계수(Distortion Coefficients)를 계산하는 카메라 보정 예제
 
-import os                    # 파일 및 경로 처리를 위한 표준 라이브러리
-import sys                   # 프로그램 종료 등 시스템 관련 기능을 위한 라이브러리
-import argparse              # 명령줄 인자(argument)를 처리하기 위한 라이브러리
-import cv2 as cv             # OpenCV 라이브러리 (이미지 처리)
-import numpy as np           # 배열 연산 및 이미지 결합(np.hstack) 사용
-try:                         # tkinter가 사용 가능한지 확인하기 위한 예외 처리
-    import tkinter as tk     # 화면 해상도 확인을 위해 tkinter 사용
-except Exception:            # tkinter가 설치되지 않았거나 사용 불가능할 경우
-    tk = None                # tk를 None으로 설정하여 이후 코드에서 처리
+import cv2                     # OpenCV 라이브러리 (이미지 처리 및 카메라 보정 기능 사용)
+import numpy as np             # 수치 계산 및 배열 처리를 위한 NumPy
+import glob                    # 특정 패턴의 파일 목록을 가져오기 위한 라이브러리
+import os                      # 파일 및 경로 처리를 위한 표준 라이브러리
 
+# 체크보드 내부 코너 개수 (가로 9개, 세로 6개)
+CHECKERBOARD = (9, 6)
 
-def main():                  # 프로그램의 메인 함수 정의
-    parser = argparse.ArgumentParser(description="원본 이미지와 그레이스케일 이미지를 나란히 표시합니다.")  # 명령줄 인자 파서 생성
-    default_image = os.path.join(os.path.dirname(__file__), "images", "soccer.jpg")  # 기본 이미지 경로 설정
-    parser.add_argument("image", nargs="?", default=default_image, help=f"불러올 이미지 경로 (기본: {default_image})")  # 명령줄에서 이미지 경로 입력 가능
-    args = parser.parse_args()  # 입력된 명령줄 인자를 파싱하여 args 객체에 저장
+# 체크보드 한 칸의 실제 크기 (mm 단위)
+square_size = 25.0
 
-    # 1) 이미지 로드 (OpenCV는 BGR 형식으로 읽음)
-    img = cv.imread(args.image)  # cv.imread()를 사용하여 지정된 경로의 이미지를 읽어옴
-    if img is None:              # 이미지 로드 실패 여부 확인
-        print(f"이미지를 불러올 수 없습니다: {args.image}")  # 오류 메시지 출력
-        sys.exit(1)              # 프로그램을 종료
+# 코너 정밀화를 위한 반복 조건 설정
+# (최대 30번 반복 또는 정확도 0.001 도달 시 종료)
+criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
-    # 2) 그레이스케일 변환 (cv.COLOR_BGR2GRAY 사용)
-    gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)  # 컬러(BGR) 이미지를 그레이스케일 이미지로 변환
+# 실제 세계 좌표(3D 좌표)를 저장할 배열 생성
+# (체커보드 코너 개수 × 3차원 좌표)
+objp = np.zeros((CHECKERBOARD[0] * CHECKERBOARD[1], 3), np.float32)
 
-    # 그레이스케일은 1채널이므로 원본과 가로로 연결하려면 3채널로 변환
-    gray_color = cv.cvtColor(gray, cv.COLOR_GRAY2BGR)  # 그레이스케일 이미지를 다시 3채널(BGR) 형태로 변환
+# 체커보드의 2D 좌표를 생성 (z=0인 평면 위의 좌표)
+objp[:, :2] = np.mgrid[0:CHECKERBOARD[0], 0:CHECKERBOARD[1]].T.reshape(-1, 2)
 
-    # 3) np.hstack()으로 가로 연결
-    result = np.hstack((img, gray_color))  # 원본 이미지와 그레이스케일 이미지를 가로로 결합
+# 실제 크기를 반영하기 위해 square_size를 곱함
+objp *= square_size
 
-    # 4) 화면 크기에 맞춰 자동 축소 후 표시, 아무 키나 누르면 닫힘
-    # 화면 크기 확인 (tkinter 사용, 실패하면 기본값 사용)
-    margin = 100  # 화면 가장자리 여유 공간 설정
-    if tk is not None:  # tkinter 사용 가능 여부 확인
-        root = tk.Tk()  # tkinter 루트 윈도우 생성
-        root.withdraw()  # tkinter 창을 화면에 표시하지 않도록 숨김
-        screen_w = root.winfo_screenwidth()  # 현재 모니터의 화면 너비 가져오기
-        screen_h = root.winfo_screenheight()  # 현재 모니터의 화면 높이 가져오기
-        root.destroy()  # tkinter 창 객체 제거
-    else:  # tkinter를 사용할 수 없는 경우
-        screen_w, screen_h = 1280, 720  # 기본 화면 크기 값을 설정
+# 모든 이미지의 3D 실제 좌표를 저장할 리스트
+objpoints = []
 
-    res_h, res_w = result.shape[0], result.shape[1]  # 결과 이미지의 높이와 너비 추출
-    scale = min(1.0, (screen_w - margin) / res_w, (screen_h - margin) / res_h)  # 화면에 맞도록 축소 비율 계산
-    if scale < 1.0:  # 이미지가 화면보다 클 경우
-        new_w = int(res_w * scale)  # 축소된 너비 계산
-        new_h = int(res_h * scale)  # 축소된 높이 계산
-        result_show = cv.resize(result, (new_w, new_h), interpolation=cv.INTER_AREA)  # 이미지 크기 축소
-    else:  # 이미지가 화면보다 작거나 같을 경우
-        result_show = result  # 원본 결과 이미지를 그대로 사용
+# 모든 이미지의 2D 이미지 좌표를 저장할 리스트
+imgpoints = []
 
-    cv.namedWindow("Original | Grayscale", cv.WINDOW_NORMAL)  # 창 크기를 조절할 수 있는 OpenCV 창 생성
-    cv.imshow("Original | Grayscale", result_show)  # 결과 이미지를 화면에 표시
-    cv.waitKey(0)  # 아무 키나 입력될 때까지 프로그램 대기
-    cv.destroyAllWindows()  # 모든 OpenCV 창 닫기
+# 현재 실행 중인 파이썬 파일의 절대 경로를 가져옴
+base_dir = os.path.dirname(os.path.abspath(__file__))
+
+# calibration_images 폴더에 있는 체커보드 이미지 패턴 설정
+image_pattern = os.path.join(base_dir, "..", "images", "calibration_images", "left*.jpg")
+
+# 위 패턴에 해당하는 모든 이미지 파일을 리스트로 가져옴
+images = glob.glob(image_pattern)
+
+# 이미지 크기를 저장할 변수
+img_size = None
 
 
-if __name__ == "__main__":  # 현재 파일이 직접 실행된 경우
-    main()                  # main 함수 실행
+# ----------------------------------
+# 체커보드 코너 검출
+# ----------------------------------
+for fname in images:                    # 모든 calibration 이미지 반복
+
+    img = cv2.imread(fname)             # 이미지 파일 읽기
+
+    if img is None:                     # 이미지 로드 실패 시
+        print(f"이미지 로드 실패: {fname}")   # 오류 메시지 출력
+        continue                        # 다음 이미지로 넘어감
+
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)   # 이미지를 그레이스케일로 변환
+
+    img_size = gray.shape[::-1]         # 이미지 크기 저장 (width, height)
+
+    # 체커보드 코너 검출
+    ret, corners = cv2.findChessboardCorners(gray, CHECKERBOARD, None)
+
+    if ret:                             # 코너 검출 성공 시
+
+        objpoints.append(objp)          # 실제 좌표 추가
+
+        # 코너 위치를 Sub-pixel 단위로 정밀화
+        corners2 = cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)
+
+        imgpoints.append(corners2)      # 이미지 좌표 추가
+
+        vis = img.copy()                # 시각화를 위해 이미지 복사
+
+        # 검출된 체커보드 코너를 이미지에 표시
+        cv2.drawChessboardCorners(vis, CHECKERBOARD, corners2, ret)
+
+        cv2.imshow("Chessboard Corners", vis)  # 화면에 코너 표시
+        cv2.waitKey(300)                        # 300ms 동안 화면 유지
+
+    else:                              # 코너 검출 실패 시
+        print(f"코너 검출 실패: {fname}")      # 실패 메시지 출력
+
+
+# 모든 OpenCV 창 닫기
+cv2.destroyAllWindows()
+
+
+# 이미지가 하나도 없는 경우 오류 발생
+if len(images) == 0:
+    raise FileNotFoundError(f"이미지를 찾지 못했습니다: {image_pattern}")
+
+# 코너 검출 성공 이미지가 없는 경우 오류 발생
+if len(objpoints) == 0 or len(imgpoints) == 0:
+    raise ValueError("체크보드 코너를 검출한 이미지가 없습니다.")
+
+
+# ----------------------------------
+# 카메라 보정(Camera Calibration)
+# ----------------------------------
+ret, K, dist, rvecs, tvecs = cv2.calibrateCamera(
+    objpoints,      # 실제 세계 좌표
+    imgpoints,      # 이미지 좌표
+    img_size,       # 이미지 크기
+    None,
+    None
+)
+
+
+# 카메라 내부 행렬 출력
+print("Camera Matrix K:")
+print(K)
+
+# 렌즈 왜곡 계수 출력
+print("\nDistortion Coefficients:")
+print(dist)
+
+
+# ----------------------------------
+# 왜곡 보정 테스트
+# ----------------------------------
+test_img = cv2.imread(images[0])        # 첫 번째 이미지를 테스트용으로 사용
+
+if test_img is None:                    # 이미지 로드 실패 시
+    raise FileNotFoundError(f"테스트 이미지를 불러올 수 없습니다: {images[0]}")
+
+# 왜곡 보정 적용
+undistorted = cv2.undistort(test_img, K, dist)
+
+# 원본 이미지 출력
+cv2.imshow("Original Image", test_img)
+
+# 왜곡이 보정된 이미지 출력
+cv2.imshow("Undistorted Image", undistorted)
+
+# 키 입력이 있을 때까지 대기
+cv2.waitKey(0)
+
+# 모든 OpenCV 창 닫기
+cv2.destroyAllWindows()
 ```
 
 </details>
@@ -192,8 +270,9 @@ if __name__ == "__main__":  # 현재 파일이 직접 실행된 경우
 <summary>전체 코드 — 02.Transform.py</summary>
 
 ```python
-# cv02_paint.py
-# 과제 02: 마우스 입력으로 이미지 위에 붓질 + 키보드로 붓 크기 조절
+# 02.Transform.py
+# OpenCV의 Affine 변환을 이용하여 이미지를 회전, 축소하고
+# 평행이동(translation)을 적용하는 기하학적 변환 예제
 
 # OpenCV 라이브러리 불러오기 (이미지 처리용)
 import cv2
@@ -346,9 +425,9 @@ cv2.destroyAllWindows()
 <summary>전체 코드 — cv03_roi.py</summary>
 
 ```python
-# cv03_roi.py
-# cv03_roi.py
-# 과제 03: 마우스로 영역 선택(드래그 사각형) + ROI 출력 + r 리셋 + s 저장
+# 03.Depth.py
+# 좌/우 스테레오 이미지를 이용하여 disparity(시차)를 계산하고
+# Z = (f × B) / d 공식을 통해 depth(깊이)를 추정하는 스테레오 비전 예제
 
 import cv2  # OpenCV 라이브러리 (이미지 처리용)
 import numpy as np  # 수치 계산 및 배열 처리를 위한 NumPy
@@ -456,4 +535,5 @@ cv2.destroyAllWindows()  # 모든 OpenCV 창 닫기
 </details>
 
 ---
+
 
