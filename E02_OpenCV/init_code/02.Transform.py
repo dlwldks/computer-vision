@@ -1,3 +1,6 @@
+# 02.Transform.py
+# OpenCV의 Affine 변환을 이용하여 이미지를 회전, 축소하고
+# 평행이동(translation)을 적용하는 기하학적 변환 예제
 # OpenCV 라이브러리 불러오기 (이미지 처리용)
 import cv2
 

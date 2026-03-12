@@ -1,3 +1,6 @@
+# 03.Depth.py
+# 좌/우 스테레오 이미지를 이용하여 disparity(시차)를 계산하고
+# Z = (f × B) / d 공식을 통해 depth(깊이)를 추정하는 스테레오 비전 예제
 import cv2  # OpenCV 라이브러리 (이미지 처리용)
 import numpy as np  # 수치 계산 및 배열 처리를 위한 NumPy
 
