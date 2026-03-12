@@ -257,15 +257,15 @@ cv2.destroyAllWindows()
 
 # Problem 2 — Image Transform
 
-주어진 이미지를 대상으로 **회전(Rotation)**, **스케일(Scaling)**, **평행이동(Translation)** 을 적용하는 문제입니다.
+주어진 이미지를 대상으로 회전(Rotation), 스케일(Scaling), 평행이동(Translation) 을 적용하는 문제입니다.
 
----
+적용한 변환
 
-## 적용한 변환
+회전 : 30도
 
-- **회전 (Rotation)** : 30°
-- **스케일 (Scaling)** : 0.8배
-- **평행이동 (Translation)** : x +80, y -40
+스케일 : 0.8배
+
+평행이동 : x +80, y -40
 
 ---
 
@@ -426,9 +426,7 @@ cv2.destroyAllWindows()
 
 ## 실행 결과
 
-| Original | Disparity map |
-|----------|---------------|
-| <img src="https://github.com/dlwldks/computer-vision/blob/main/E02_OpenCV/images/left.png" width="400"> | <img src="https://github.com/dlwldks/computer-vision/blob/main/E02_OpenCV/outputs/03_disparity_color.png" width="400"> |
+<figure> <img src="outputs/03_disparity_color.png" alt="Disparity 컬러맵" width="400"/> <figcaption>시차(disparity)를 컬러맵으로 시각화한 결과</figcaption> </figure> <figure> <img src="outputs/03_depth_color.png" alt="Depth 컬러맵" width="400"/> <figcaption>깊이(depth)를 컬러맵으로 시각화한 결과</figcaption> </figure> <figure> <img src="outputs/03_left_roi.png" alt="왼쪽 이미지 ROI" width="400"/> <figcaption>ROI가 표시된 왼쪽 이미지</figcaption> </figure> <figure> <img src="outputs/03_right_roi.png" alt="오른쪽 이미지 ROI" width="400"/> <figcaption>ROI가 표시된 오른쪽 이미지</figcaption> </figure>
 
 ---
 
@@ -546,7 +544,6 @@ cv2.destroyAllWindows()  # 모든 OpenCV 창 닫기
 </details>
 
 ---
-
 
 
 
