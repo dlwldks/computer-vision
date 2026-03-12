@@ -77,8 +77,17 @@ python 03.Depth.py
 
 # Problem 1 — Camera Calibration
 
-이미지를 불러온 후 Grayscale로 변환하고  
-원본 이미지와 나란히 출력합니다.
+체커보드 이미지를 이용하여 **카메라 내부 파라미터**를 추정하는 과정입니다.
+
+---
+
+## 주요 내용
+
+- **체커보드 코너 검출**
+- **Sub-pixel 단위 코너 정밀화**
+- **카메라 행렬 (Camera Matrix) 계산**
+- **왜곡 계수 (Distortion Coefficients) 계산**
+- **보정된 이미지 (Undistorted Image) 확인**
 
 ---
 
@@ -535,5 +544,6 @@ cv2.destroyAllWindows()  # 모든 OpenCV 창 닫기
 </details>
 
 ---
+
 
 
