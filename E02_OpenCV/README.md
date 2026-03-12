@@ -3,7 +3,7 @@
 ## 0. 과제 개요
 
 이번 과제에서는 OpenCV를 사용하여 **카메라 보정(Camera Calibration)**,  
-**기하학적 변환(Transform)**, **시차(Disparity) 및 깊이(Depth) 계산**을 구현합니다.
+**기하학적 변환(Transform)**, **시차(Disparity) 및 깊이(Depth) 계산**을 구현합니다. 
 
 ---
 
@@ -91,13 +91,45 @@ python 03.Depth.py
 
 ---
 
-## 실행 결과
+### 실행 결과
 
-카메라 보정이 완료되면 콘솔에 다음과 같이 내부 파라미터가 출력됩니다.
+#### Camera Matrix (카메라 내부 파라미터)
+
+
+K =
+
+[[536.07345314   0.         342.37046827]
+ [  0.         536.01636274 235.53687064]
+ [  0.           0.           1.        ]]
+
+
+Camera Matrix는 카메라의 내부 파라미터를 나타내는 행렬로,  
+초점 거리(fx, fy)와 이미지 중심(principal point: px, py) 정보를 포함한다.
+
+- **fx, fy** : 카메라의 focal length (픽셀 단위)
+- **px, py** : principal point (렌즈 중심이 이미지에 맺히는 좌표)
+
+---
+
+#### Distortion Coefficients (렌즈 왜곡 계수)
+
+
+[-0.26509039 -0.0467422 0.00183302 -0.00031469 0.25231221]
+
+
+- **k1, k2, k3** : Radial Distortion (방사 왜곡)  
+  → 렌즈 중심에서 멀어질수록 직선이 휘어지는 현상
+
+- **p1, p2** : Tangential Distortion (접선 왜곡)  
+  → 렌즈와 이미지 센서가 완전히 평행하지 않을 때 발생
+
+---
+
+#### Calibration 결과 이미지
 
 <figure>
-  <img src="outputs/cv01_result.png" alt="Grayscale 결과" width="400"/>
-  <figcaption>원본 이미지와 Grayscale 변환 결과</figcaption>
+  <img src="outputs/calliberation.png" width="600">
+  <figcaption>Camera Calibration 결과</figcaption>
 </figure>
 
 ---
@@ -255,17 +287,15 @@ cv2.destroyAllWindows()
 
 ---
 
-# Problem 2 — Image Transform
+## Problem 2 — Image Transform
 
-주어진 이미지를 대상으로 회전(Rotation), 스케일(Scaling), 평행이동(Translation) 을 적용하는 문제입니다.
+주어진 이미지를 대상으로 회전(Rotation), 스케일(Scaling), 평행이동(Translation)을 적용하는 문제입니다.
 
-적용한 변환
+### 적용한 변환
 
-회전 : 30도
-
-스케일 : 0.8배
-
-평행이동 : x +80, y -40
+- 회전 : 30도
+- 스케일 : 0.8배
+- 평행이동 : x +80, y -40
 
 ---
 
@@ -426,12 +456,18 @@ cv2.destroyAllWindows()
 
 ## 실행 결과
 
-<figure> <img src="outputs/03_disparity_color.png" alt="Disparity 컬러맵" width="400"/> <figcaption>시차(disparity)를 컬러맵으로 시각화한 결과</figcaption> </figure> <figure> <img src="outputs/03_depth_color.png" alt="Depth 컬러맵" width="400"/> <figcaption>깊이(depth)를 컬러맵으로 시각화한 결과</figcaption> </figure> <figure> <img src="outputs/03_left_roi.png" alt="왼쪽 이미지 ROI" width="400"/> <figcaption>ROI가 표시된 왼쪽 이미지</figcaption> </figure> <figure> <img src="outputs/03_right_roi.png" alt="오른쪽 이미지 ROI" width="400"/> <figcaption>ROI가 표시된 오른쪽 이미지</figcaption> </figure>
+| Original | Disparity map |
+|----------|---------------|
+| <img src="https://github.com/dlwldks/computer-vision/blob/main/E02_OpenCV/images/left.png" width="400"> | <img src="https://github.com/dlwldks/computer-vision/blob/main/E02_OpenCV/outputs/03_disparity_color.png" width="400"> |
 
+### ROI 비교 결과
+
+- **가장 가까운 ROI:** Frog
+- **가장 먼 ROI:** Painting
 ---
 
 <details>
-<summary>전체 코드 — cv03_roi.py</summary>
+<summary>전체 코드 — 03.Depth.py</summary>
 
 ```python
 # 03.Depth.py
@@ -544,6 +580,5 @@ cv2.destroyAllWindows()  # 모든 OpenCV 창 닫기
 </details>
 
 ---
-
 
 
