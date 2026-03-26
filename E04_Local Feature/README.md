@@ -412,11 +412,6 @@ plt.show()
 ## 실행 결과
 
 <figure>
-  <img src="https://github.com/dlwldks/computer-vision/blob/main/E04_Local%20Feature/outputs/03_matching_result.jpg" alt="매칭 결과" width="400"/>
-  <figcaption>특징점 매칭 결과 (Inlier만 표시)</figcaption>
-</figure>
-
-<figure>
   <img src="https://github.com/dlwldks/computer-vision/blob/main/E04_Local%20Feature/outputs/03_panorama-result.png" alt="정합 결과" width="400"/>
   <figcaption>호모그래피 기반 이미지 정합 결과</figcaption>
 </figure>

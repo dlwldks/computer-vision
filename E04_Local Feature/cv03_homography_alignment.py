@@ -268,4 +268,4 @@ plt.axis("off")
 plt.tight_layout()
 
 # 출력
-plt.show()
+plt.show() 
