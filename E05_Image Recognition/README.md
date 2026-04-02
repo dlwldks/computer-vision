@@ -263,13 +263,19 @@ plt.show()
 
 ### 📊 데이터 확인
 
-![mnist_sample](https://github.com/dlwldks/computer-vision/blob/main/E05_Image%20Recognition/outputs/01_train data.png)
+<figure>
+  <img src="https://github.com/dlwldks/computer-vision/blob/main/E05_Image%20Recognition/outputs/01_train data.png" alt="mnist_sample" width="500"/>
+  <figcaption>mnist_sample</figcaption>
+</figure>
 
 ---
 
 ### 📈 학습 결과
 
-![mnist_graph](https://github.com/dlwldks/computer-vision/blob/main/E05_Image%20Recognition/outputs/01_loss accuracy.png)
+<figure>
+  <img src="https://github.com/dlwldks/computer-vision/blob/main/E05_Image%20Recognition/outputs/01_loss accuracy.png" alt="mnist_graph" width="500"/>
+  <figcaption>mnist_graph</figcaption>
+</figure>
 
 - **Test Accuracy:** `0.9758`
 
@@ -277,7 +283,10 @@ plt.show()
 
 ### 🔍 예측 결과
 
-![mnist_pred](https://github.com/dlwldks/computer-vision/blob/main/E05_Image%20Recognition/outputs/01_image predict.png)
+<figure>
+  <img src="https://github.com/dlwldks/computer-vision/blob/main/E05_Image%20Recognition/outputs/01_image predict.png" alt="mnist_pred" width="500"/>
+  <figcaption>mnist_pred</figcaption>
+</figure>
 
 예측값: 7  
 실제값: 7  
@@ -596,7 +605,10 @@ plt.show()
 
 ### 📈 학습 결과
 
-![cifar_graph](https://github.com/dlwldks/computer-vision/blob/main/E05_Image%20Recognition/outputs/02_loss accuracy.png)
+<figure>
+  <img src="https://github.com/dlwldks/computer-vision/blob/main/E05_Image%20Recognition/outputs/02_loss accuracy.png" alt="cifar_graph" width="500"/>
+  <figcaption>cifar_graph</figcaption>
+</figure>
 
 - **Test Accuracy:** `0.7242`
 - **Test Loss:** `0.8511`
@@ -605,7 +617,10 @@ plt.show()
 
 ### 🐶 이미지 예측 결과
 
-![dog_pred](https://github.com/dlwldks/computer-vision/blob/main/E05_Image%20Recognition/outputs/02_image predict.png)
+<figure>
+  <img src="https://github.com/dlwldks/computer-vision/blob/main/E05_Image%20Recognition/outputs/02_image predict.png" alt="dog_pred" width="500"/>
+  <figcaption>dog_pred</figcaption>
+</figure>
 
 예측 클래스: dog  
 신뢰도: 0.6103  
