@@ -40,7 +40,7 @@ gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 # 3. SIFT 객체 생성
 # =========================
 
-sift = cv.SIFT_create(nfeatures=300)  
+sift = cv.SIFT_create(nfeatures=400)  
 # SIFT 알고리즘 객체 생성
 # nfeatures=300 → 최대 300개의 특징점만 검출하도록 제한
 
