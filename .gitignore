@@ -1,3 +1,15 @@
 venv/
+venv311/
 __pycache__/
 *.pyc
+
+*.mp4
+*.avi
+*.mov
+
+*.weights
+*.pt
+*.pth
+*.onnx
+mediapipe/
+*/mediapipe/
